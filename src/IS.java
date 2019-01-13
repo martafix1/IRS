@@ -22,9 +22,10 @@ public class IS {
     private JPanel main;
     private JTextPane textPane1;
     private JPanel Displaypannel;
+    private JTable table1;
     private JButton but;
     private Properties prop;
-    private JPlot plot;
+    private JPlot plot = null;
     private int x = 1;
 
     public Properties getProp() {
@@ -40,10 +41,10 @@ public class IS {
     public IS() {
 
 
-        prop = readProperties();
+        prop = bootup.readProperties();
 
         plot = new JPlot(new JavaPlot(prop.getProperty("gnuplotpath"), true));
-        plot.getJavaPlot().addPlot("x *" + x);
+        plot.getJavaPlot().addPlot("");
 
         plot.setPreferredSize(new DimensionUIResource(100, 100));
         Displaypannel = new JPanel();
@@ -75,63 +76,13 @@ public class IS {
 
     }
 
-    public static Properties readProperties() {
 
-        Properties prop = new Properties();
-        InputStream input = null;
-        try {
-            input = new FileInputStream("./prop/config.properties");
-            prop.load(input);
-
-        } catch (IOException io) {
-            io.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else
-                return null;
-
-        }
-        return prop;
-    }
-
-    public static void writeProperties(Properties prop) {
-
-        OutputStream output = null;
-        try {
-
-            output = new FileOutputStream("./prop/config.properties");
-
-            // set the properties value !!-tmp
-            // prop.setProperty("gnuplotpath", "D:/Martin/Programovani/SOC/gnuplot/bin/gnuplot.exe");
-
-            // save properties to project root folder
-            prop.store(output, null);
-
-        } catch (IOException io) {
-            io.printStackTrace();
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-    }
 
 
     public void init() {
 
         prop = null;
-        prop = readProperties();
+        prop = bootup.readProperties();
 
 
         //   plot.getJavaPlot().addPlot("x*sin(x)");
@@ -168,7 +119,7 @@ public class IS {
         p.plot();*/
 
 
-        writeProperties(prop);
+        bootup.writeProperties(prop);
 
     }
 
@@ -194,7 +145,7 @@ public class IS {
         slider1 = new JSlider();
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -202,17 +153,15 @@ public class IS {
         button1 = new JButton();
         button1.setText("Button");
         gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         main.add(button1, gbc);
         final JScrollPane scrollPane1 = new JScrollPane();
         gbc = new GridBagConstraints();
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.gridheight = 5;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         main.add(scrollPane1, gbc);
         textPane1 = new JTextPane();
@@ -221,15 +170,30 @@ public class IS {
         progressBar1.setIndeterminate(false);
         progressBar1.setStringPainted(true);
         gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         main.add(progressBar1, gbc);
         gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.fill = GridBagConstraints.BOTH;
         main.add(Displaypannel, gbc);
+        table1 = new JTable();
+        table1.setAutoCreateRowSorter(true);
+        table1.setToolTipText("table :]");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        main.add(table1, gbc);
+        final JPanel spacer1 = new JPanel();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        main.add(spacer1, gbc);
     }
 
     /**
