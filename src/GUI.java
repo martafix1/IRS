@@ -2,6 +2,7 @@ import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.swing.JPlot;
 
 import javax.swing.*;
+import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,7 @@ import java.awt.event.WindowEvent;
 
 public class GUI extends JFrame {
 
+
     private JMenuBar menuBar ;
     private JMenu File;
     private JMenuItem Exit;
@@ -17,9 +19,10 @@ public class GUI extends JFrame {
     private JMenu Help;
     private JTextArea textPane;
     private JPanel Displaypannel;
-
+    private JButton Button1;
     /**-----------**/
     private PlotHandler plotHandler;
+    private JPlot plot;
     //private JMenu Help;
     private Dimension dimension;
     /*String gnupath = prop.getProperty("gnuplotpath");
@@ -38,7 +41,7 @@ public class GUI extends JFrame {
     public GUI(String title, Dimension dimension,String gnuplotpath) throws HeadlessException {
         super(title);
         this.dimension = dimension;
-        plotHandler = new PlotHandler(gnuplotpath);
+        plotHandler =new PlotHandler(gnuplotpath);
         menuBar = new JMenuBar();
         File = new JMenu("File");
         Settings = new JMenu("Settings");
@@ -46,6 +49,7 @@ public class GUI extends JFrame {
         Exit = new JMenuItem("Exit");
         textPane = new JTextArea(10,30);
         Displaypannel = new JPanel();
+        Button1 = new JButton("Click me");
 
     }
 
@@ -69,31 +73,44 @@ public class GUI extends JFrame {
        });
        menuBar.add(Settings);
        menuBar.add(Help);
-        tryPlot();
-    this.getContentPane().add(plotHandler.getGraph());
-//       Displaypannel.add(plotHandler.getGraph());
-//       this.getContentPane().setLayout(new BorderLayout());
-//       this.getContentPane().add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,new JScrollPane(Displaypannel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),new JScrollPane(textPane,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED)),BorderLayout.CENTER);
+        //tryPlot();
+        //plot = new JPlot(new JavaPlot("D:/Martin/Programovani/SOC/gnuplot/bin/gnuplot.exe", true));
+        //plot.getJavaPlot().addPlot("x**2");
+        //PlotHandler x=new PlotHandler("D:/Martin/Programovani/SOC/gnuplot/bin/gnuplot.exe");
 
+        Spectrum spc=new Spectrum("ahoj","./prop/a.txt");
+        plotHandler.addData(spc);
+
+        plotHandler.addPlot(0);
+        plot = plotHandler.getGraph();
+        //plot.setPreferredSize(new DimensionUIResource(100, 100));
+        Displaypannel = new JPanel();
+        //Displaypannel.setLayout(new BorderLayout(0, 0));
+        //plotHandler.addPlot("x**2");
+        Displaypannel.setLayout(new BorderLayout());
+        Displaypannel.add(plot, BorderLayout.CENTER);
+        //plotHandler.getGraph().plot();
+       //  plot.plot();
+       // this.getContentPane().add(Displaypannel);
+    //this.getContentPane().add(plotHandler.getGraph());
+       //Displaypannel.add(plotHandler.getGraph());
+       this.getContentPane().setLayout(new BorderLayout());
+       this.getContentPane().add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,new JScrollPane(Displaypannel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),new JScrollPane(textPane,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED)),BorderLayout.CENTER);
+      this.getContentPane().add(Button1,BorderLayout.SOUTH);
        //this.getContentPane().add(,BorderLayout.EAST);
-
+        Button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plotHandler.addPlot("0.1");
+                plot = plotHandler.getGraph();
+                Displaypannel.remove(0);
+                System.err.println("Clicked");
+                Displaypannel.add(plot);
+                GUI.super.getContentPane().revalidate();
+            }
+        });
 
        this.setVisible(true);
-
-
-    }
-
-    private void tryPlot(){
-        Spectrum x = new Spectrum("spektrum 1","./prop/a.txt");//class spektrum, nacita data, uchovava je v sobe a v budoucnu dopisu metody na upravu dat (peakovani, prevody emit-transmit, ...)
-
-        //PlotHandler bla=new PlotHandler("D:/program files/gnuplot/bin/gnuplot.exe");//ma v sobe arraylist spekter, moznost pro jejich odebirani a pridavani, to stejne s grafy, nejake metody na upravu stylu
-        plotHandler.addData(x);//pridejme data do handleru
-        plotHandler.addPlot(plotHandler.getData(0).getData());//pridame novy graf prebirajici hodnoty spektra
-        plotHandler.addPlot("sin(x*5)/20+0.1");//pro prdel pridam graf sinusu
-        plotHandler.setColor(0,255,0,0);//prvni bude cerveny
-        plotHandler.setColor(1,100,0,255);//druhy fialovy
-        plotHandler.setRange("x", 400, 4000);
-        plotHandler.setRange("y", 0, 0.25);
 
 
     }

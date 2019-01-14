@@ -52,15 +52,16 @@ class PlotHandler {
     }
     
     //plots management
-    boolean addPlot(int index){//prida graf do Jplotu (pripraveny k vykresleni), vybira z ulozenych spekter
+    void addPlot(int index){//prida graf do Jplotu (pripraveny k vykresleni), vybira z ulozenych spekter
         try{
             p.addPlot(data.get(index).getData());
-            return true;
+
         }
         catch(IndexOutOfBoundsException exc){
             exc.printStackTrace();
-            return false;
+
         }
+        //p.addPlot(data.get(index).getData());
     }
     
     void addPlot(double[][] array){//prida graf libovolnych hodnot do Jplotu
@@ -103,10 +104,13 @@ class PlotHandler {
         return false;
     }
      
-    JPlot getGraph(){//'nahraje' javaplot do jplotu a ten pouzije jako navratovou hodnotu pro ruzne graficke picoviny
+    JPlot getGraph(){//'nahraje' javaplot do jplotu a ten pouzije jako navratovou hodnotu pro ruzne graficke picovinz
         JPlot plot;
+        ((AbstractPlot) p.getPlots().get(0)).getPlotStyle().setStyle(Style.LINES);
+
         plot = new JPlot(p);
-        //plot.getJavaPlot().plot();
+        plot.getJavaPlot().plot();
+
         return plot;
     }   
 }
