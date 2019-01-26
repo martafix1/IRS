@@ -14,12 +14,12 @@ public class bootup {
         } catch (Exception e){e.printStackTrace();}
         Properties prop = readProperties();
         gnuplotpath =  prop.getProperty("gnuplotpath");
+
         double d = Double.valueOf("5.02");
         System.out.println((d+0.3));
         //IS form = new IS();
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        dimension.width /=2;
-        dimension.height /=2;
+
         GUI form2  = new GUI("title",dimension,gnuplotpath);
        // try{}catch (Exception e){e.printStackTrace();}
 
